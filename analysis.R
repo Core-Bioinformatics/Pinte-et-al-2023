@@ -80,7 +80,7 @@ run.feature.stability <- function(seurat.object){
   n_repetitions = 30
   n_cores = 10
   # look at dim reduction and feature selection
-  var_features = seurat.object@assays[["SCT"]]@var.features
+  var_features = VariableFeatures(seurat.object)
   n_abundant = 3000
   most_abundant_genes = rownames(seurat.object)[order(Matrix::rowSums(GetAssayData(seurat.object, assay='SCT', slot='counts')), decreasing=TRUE)]
   # get feature sets for comparisons
@@ -142,12 +142,13 @@ plot_feature_stability_mb_facet(pca_feature_stability_object, text_size = 3)
 plot_feature_stability_ecs_facet(pca_feature_stability_object)
 
 # based on ClustAssess analysis, highly variable 2500 genes were selected both for all samples together and for normoxia and hypoxia samples separately
-so = RunPCA(so,npcs = 30,approx = F,verbose = F,features = head(so@assays$SCT@var.features,2500))
+so = RunPCA(so,npcs = 30,approx = F,verbose = F,features = head(VariableFeatures(so,2500)))
 so = RunUMAP(so,reduction = "pca",dims = 1:30,n.neighbors = 30,min.dist = 0.3,metric = "cosine",verbose = F)
 
 # The following analysis was performed separately for only normoxia and only hypoxia samples
 listofseurat = list('NO'=subset(so,NO_HY=='NO'),
-                    'HY'=subset(so,NO_HY=='HY'))
+                    'HY'=subset(so,NO_HY=='HY'),
+                    'WT'=subset(so,WT_KO=='WT'))
 
 # ClustAssess NN analysis
 run.nn.stability <- function(so.obj){
@@ -209,6 +210,7 @@ run.clust.stability <- function(so.obj,k.param){
 }
 run.clust.stability(listofseurat$NO,30)
 run.clust.stability(listofseurat$HY,25)
+run.clust.stability(listofseurat$WT,30)
 # based on this analysis SLM was selected as the most stable clustering approach
 
 run.resolution.stability <- function(so.obj,k.param,clustering.method){
@@ -231,13 +233,17 @@ run.resolution.stability <- function(so.obj,k.param,clustering.method){
 }
 run.resolution.stability(listofseurat$NO,30,3)
 run.resolution.stability(listofseurat$HY,25,3)
-# the selected resolutions were 0.1 for NO and 0.05 for HY
+run.resolution.stability(listofseurat$WT,30,3)
+# the selected resolutions were 0.1 for NO, 0.05 for HY, 0.04 for WT
 adj_matrix = FindNeighbors(listofseurat$NO@reductions$umap@cell.embeddings, k.param = 30, nn.method = "rann", verbose = F)$snn
 clusters=FindClusters(adj_matrix,algorithm=3,resolution=0.1)
 listofseurat[['NO']][['cluster_res_0.1']]=clusters
 adj_matrix = FindNeighbors(listofseurat$HY@reductions$umap@cell.embeddings, k.param = 25, nn.method = "rann", verbose = F)$snn
 clusters=FindClusters(adj_matrix,algorithm=3,resolution=0.05)
 listofseurat[['HY']][['cluster_res_0.05']]=clusters
+adj_matrix = FindNeighbors(listofseurat$WT@reductions$umap@cell.embeddings, k.param = 30, nn.method = "rann", verbose = F)$snn
+clusters=FindClusters(adj_matrix,algorithm=3,resolution=0.05)
+listofseurat[['WT']][['cluster_res_0.04']]=clusters
 
 #----------------------------------------------------------------------------------
 
@@ -272,6 +278,7 @@ markers.lfc1 = markers[abs(markers$avg_log2FC)>1,]
 markers = FindMarkers(subset(listofseurat$NO,cell_type=='BC1'),group.by = 'WT_KO',ident.1 = 'WT',ident.2 = 'KO')
 markers = markers[markers$p_val_adj<0.05,]
 markers.lfc1 = markers[abs(markers$avg_log2FC)>1,]
+# The same was performed between NO and HY in the wild type sample
 
 #----------------------------------------------------------------------------------
 
