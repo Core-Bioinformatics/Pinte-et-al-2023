@@ -1,5 +1,10 @@
-This repo contains code relevant for the analysis (processing, cell filtering, normalization, dim reduction, clustering, marker gene identification) of single-cell RNA-seq data (available via GEO accession GSE220784) for the manuscript ...title of manuscript...
+This repo contains code relevant for the analysis (processing, cell filtering, normalization, dim reduction, clustering, marker gene identification) of single-cell RNA-seq data (available via GEO accession GSE220784) for the manuscript _The role of EHF in lung airways’ pathological processes_.
 
 ## Abstract
-One of the most common genetic diseases, Cystic Fibrosis (CF), is caused by loss or dysfunction of an ion channel, the CF Transmembrane conductance Regulator (CFTR). Most morbimortality is due to the lung disease which severity is only partially explained by CFTR mutations. Other genes thought to be implicated were outlined by Genome-Wide Association Studies. Here, we investigate one of them, the transcription factor EHF. Though this gene was previously explored, the effect on lung disease remains unclear. We knocked out EHF from induced pluripotent stem cells and differentiated clones into airways cells in air-liquid interface cultures. Cells were sent for scRNAseq and we found a set of differentially expressed genes and basal cell state changes. Moreover, in hypoxic conditions, we found differentially expressed genes and a reduced HIF1α response. Our results suggest low EHF levels could reduce CF lung disease severity and provide prospects for novel therapies.
-
+In the lung airways, multiple cell types facilitate airflow to alveoli, clearing out debris, particles, and pathogens. These vital processes are impeded in chronic inflammatory
+respiratory diseases. There, the epithelium typically suffers from inflammation, infections, and hypoxia. An increasing body of evidence highlights the critical role of modifier genes in
+responses and resistance against these pathogenic processes. Here, we sought to study the transcription factor EHF,suggested by previous studies as a putative modifier gene, yet whose
+functional role remains ambiguous. To address this question, we investigated the phenotypical and functional effects of EHF-knocked out on human induced Pluripotent Stem
+Cells-derived Airway Epithelial Cells. The loss of EHF enhanced Cystic fibrosis transmembrane conductance regulator activity, altered basal cell state, increased Trans-Epithelial Electrical
+Resistance, and reduced HIF-1α-mediated response to hypoxia. Here, we show that variation in EHF levels may impact lung diseases through several mechanisms, thereby highlighting
+prospects for novel therapies.
